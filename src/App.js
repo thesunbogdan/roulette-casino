@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import RoulettePage from "./roulette-page";
+import { Routes, Route } from "react-router-dom";
+import Register from "./Register";
+import Login from "./Login";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      currentUser: null,
+    };
+  }
+
+  render() {
+    return (
+      <Routes>
+        <Route path="/*" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/roulette-page" element={<RoulettePage />} />
+      </Routes>
+    );
+  }
 }
 
 export default App;
