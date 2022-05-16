@@ -1,16 +1,19 @@
 import React from "react";
 import { Wheel } from "react-custom-roulette";
-import data from "./data";
+import { data } from "./data";
+import BettingMat from "./betting-mat";
 
 class RoulettePage extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      mustSpin: false,
+      mustSpin: null,
       data: [],
     };
   }
+
+  winningNumber = -1;
 
   componentDidMount() {
     this.setState({ data: data });
@@ -21,6 +24,9 @@ class RoulettePage extends React.Component {
   };
 
   render() {
+    if (this.state.mustSpin === true) {
+      this.winningNumber = this.getWinningNumber();
+    }
     return (
       <div>
         <Wheel
@@ -38,14 +44,23 @@ class RoulettePage extends React.Component {
           innerBorderWidth={40}
           textDistance="80"
           mustStartSpinning={this.state.mustSpin}
-          prizeNumber={this.getWinningNumber()}
+          prizeNumber={this.winningNumber}
           data={this.state.data}
           backgroundColors={["#3e3e3e", "#df3428"]}
           textColors={["#ffffff"]}
         />
-        <button onClick={() => this.setState({ mustSpin: true })}>SPIN</button>
-        {/* <p>{this.state.mustSpin ? "true" : "false"}</p> */}
-        {/* <p>{this.state.data[this.state.winningNumber]?.option}</p> */}
+        {this.state.mustSpin ? (
+          <button disabled>SPIN</button>
+        ) : (
+          <button onClick={() => this.setState({ mustSpin: true })}>
+            SPIN
+          </button>
+        )}
+        {/* <p>{this.state.data[this.winningNumber]?.option}</p> */}
+        <BettingMat
+          mustSpin={this.state.mustSpin}
+          winningNumber={this.state.data[this.winningNumber]?.option}
+        />
       </div>
     );
   }
