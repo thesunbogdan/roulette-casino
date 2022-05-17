@@ -19,15 +19,6 @@ class BettingMat extends React.Component {
   handleClick = (event) => {
     const { innerText } = event.target;
 
-    if (this.state.selectedChip === 0) {
-      alert("Please select a chip");
-      return;
-    }
-
-    if (this.props.mustSpin) {
-      alert("Please wait for the round to finish");
-    }
-
     this.setState((prevState) => {
       return {
         [innerText]: prevState[innerText] + this.state.selectedChip,
@@ -57,8 +48,8 @@ class BettingMat extends React.Component {
     else finalPrize += this.state["19 to 36"] * 2;
     if (
       [
-        1, 3, 5, 7, 9, 12, 14, 26, 18, 21, 19, 23, 25, 27, 30, 32, 34, 36,
-      ].indexOf(winningNumber)
+        1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 19, 23, 25, 27, 30, 32, 34, 36,
+      ].indexOf(winningNumber) !== -1
     )
       finalPrize += this.state["red"] * 2;
     else finalPrize += this.state["black"] * 2;
@@ -77,209 +68,359 @@ class BettingMat extends React.Component {
     }
 
     return (
-      <>
-        <table>
-          <thead>
-            <tr>
-              <th
-                data-value="0"
-                rowSpan="3"
-                className="green"
-                onClick={this.handleClick}
-              >
-                0
-              </th>
-              <th className="red" onClick={this.handleClick}>
-                3
-              </th>
-              <th onClick={this.handleClick} className="black">
-                6
-              </th>
-              <th onClick={this.handleClick} className="red">
-                9
-              </th>
-              <th onClick={this.handleClick} className="red">
-                12
-              </th>
-              <th onClick={this.handleClick} className="black">
-                15
-              </th>
-              <th onClick={this.handleClick} className="red">
-                18
-              </th>
-              <th onClick={this.handleClick} className="red">
-                21
-              </th>
-              <th onClick={this.handleClick} className="black">
-                24
-              </th>
-              <th onClick={this.handleClick} className="red">
-                27
-              </th>
-              <th onClick={this.handleClick} className="red">
-                30
-              </th>
-              <th onClick={this.handleClick} className="black">
-                33
-              </th>
-              <th onClick={this.handleClick} className="red">
-                36
-              </th>
-              <th className="green" onClick={this.handleClick}>
-                1st 2 to 1
-              </th>
-            </tr>
-            <tr>
-              <th onClick={this.handleClick} className="black">
-                2
-              </th>
-              <th onClick={this.handleClick} className="red">
-                5
-              </th>
-              <th onClick={this.handleClick} className="black">
-                8
-              </th>
-              <th onClick={this.handleClick} className="black">
-                11
-              </th>
-              <th onClick={this.handleClick} className="red">
-                14
-              </th>
-              <th onClick={this.handleClick} className="black">
-                17
-              </th>
-              <th onClick={this.handleClick} className="black">
-                20
-              </th>
-              <th onClick={this.handleClick} className="red">
-                23
-              </th>
-              <th onClick={this.handleClick} className="black">
-                26
-              </th>
-              <th onClick={this.handleClick} className="black">
-                29
-              </th>
-              <th onClick={this.handleClick} className="red">
-                32
-              </th>
-              <th onClick={this.handleClick} className="black">
-                35
-              </th>
-              <th className="green" onClick={this.handleClick}>
-                2nd 2 to 1
-              </th>
-            </tr>
-            <tr>
-              <th onClick={this.handleClick} className="red">
-                1
-              </th>
-              <th onClick={this.handleClick} className="black">
-                4
-              </th>
-              <th onClick={this.handleClick} className="red">
-                7
-              </th>
-              <th onClick={this.handleClick} className="black">
-                10
-              </th>
-              <th onClick={this.handleClick} className="black">
-                13
-              </th>
-              <th onClick={this.handleClick} className="red">
-                16
-              </th>
-              <th onClick={this.handleClick} className="red">
-                19
-              </th>
-              <th onClick={this.handleClick} className="black">
-                22
-              </th>
-              <th onClick={this.handleClick} className="red">
-                25
-              </th>
-              <th onClick={this.handleClick} className="black">
-                28
-              </th>
-              <th onClick={this.handleClick} className="black">
-                31
-              </th>
-              <th onClick={this.handleClick} className="red">
-                34
-              </th>
-              <th className="green" onClick={this.handleClick}>
-                3rd 2 to 1
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="none"></td>
-              <td
-                colSpan="4"
-                rowSpan="2"
-                className="green"
-                onClick={this.handleClick}
-              >
-                1st 12
-              </td>
-              <td
-                colSpan="4"
-                rowSpan="2"
-                className="green"
-                onClick={this.handleClick}
-              >
-                2nd 12
-              </td>
-              <td
-                colSpan="4"
-                rowSpan="2"
-                className="green"
-                onClick={this.handleClick}
-              >
-                3rd 12
-              </td>
-              <td className="none"></td>
-            </tr>
-            <tr className="none">
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td className="none"></td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                1 to 18
-              </td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                EVEN
-              </td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                red
-              </td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                black
-              </td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                ODD
-              </td>
-              <td colSpan="2" className="green" onClick={this.handleClick}>
-                19 to 36
-              </td>
-              <td className="none"></td>
-            </tr>
-          </tbody>
-        </table>
-        {Object.keys(this.state).map((key, value) => {
-          if (this.state[key] != 0 && key != "selectedChip")
-            return (
-              <div key={key}>
-                <p>
-                  {key}: {this.state[key]}$
-                </p>
-              </div>
-            );
-        })}
-      </>
+      <div className="mat-and-bets">
+        <div className="mat">
+          <table>
+            <thead>
+              <tr>
+                <th
+                  data-value="0"
+                  rowSpan="3"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  0
+                </th>
+                <th
+                  className="red"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  3
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  6
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  9
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  12
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  15
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  18
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  21
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  24
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  27
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  30
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  33
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  36
+                </th>
+                <th
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  1st 2 to 1
+                </th>
+              </tr>
+              <tr>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  2
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  5
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  8
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  11
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  14
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  17
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  20
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  23
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  26
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  29
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  32
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  35
+                </th>
+                <th
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  2nd 2 to 1
+                </th>
+              </tr>
+              <tr>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  1
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  4
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  7
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  10
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  13
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  16
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  19
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  22
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  25
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  28
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="black"
+                >
+                  31
+                </th>
+                <th
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                  className="red"
+                >
+                  34
+                </th>
+                <th
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  3rd 2 to 1
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="none"></td>
+                <td
+                  colSpan="4"
+                  rowSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  1st 12
+                </td>
+                <td
+                  colSpan="4"
+                  rowSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  2nd 12
+                </td>
+                <td
+                  colSpan="4"
+                  rowSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  3rd 12
+                </td>
+                <td className="none"></td>
+              </tr>
+              <tr className="none">
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td className="none"></td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  1 to 18
+                </td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  EVEN
+                </td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  red
+                </td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  black
+                </td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  ODD
+                </td>
+                <td
+                  colSpan="2"
+                  className="green"
+                  onClick={!this.props.mustSpin ? this.handleClick : null}
+                >
+                  19 to 36
+                </td>
+                <td className="none"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="bets-and-history">
+          <div className="history">
+            History: 18 19 0 34 22 15 18 2 1 2 2 4 34 36 30 18 19 0 34 22 15 18
+            2 1 2 2 4 34 36 30 18 19 0 34 22 15 18 2 1 2 2 4 34 36 30 18 19 0 34
+            22 15 18 2 1 2 2 4 34 3
+          </div>
+          <div className="bets">
+            {Object.keys(this.state).map((key, value) => {
+              if (this.state[key] != 0 && key != "selectedChip")
+                return (
+                  <div className="bet" key={key}>
+                    {key}: {this.state[key]}$
+                  </div>
+                );
+            })}
+          </div>
+        </div>
+      </div>
     );
   }
 }

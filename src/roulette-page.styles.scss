@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.body {
+  background-image: url("background.jpg");
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    .spin-button {
+      background-color: rgb(221, 150, 16);
+      border-radius: 50%;
+      position: absolute;
+      left: 174px;
+      top: 174px;
+      height: 100px;
+      width: 100px;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+      font-weight: bold;
+    }
+
+    .bottom {
+      flex: 1;
+      color: white;
+      padding: 30px;
+    }
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+  }
+}
