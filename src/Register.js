@@ -135,6 +135,7 @@ class Register extends React.Component {
                   </Grid>
                 </Grid>
                 <Button
+                  href="/roulette-page"
                   type="submit"
                   fullWidth
                   variant="contained"

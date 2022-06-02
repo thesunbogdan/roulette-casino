@@ -28,9 +28,45 @@
     }
 
     .bottom {
+      display: flex;
+      flex-direction: column;
       flex: 1;
       color: white;
       padding: 30px;
+      .segment {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        input {
+          margin: auto;
+          width: 100%;
+          height: 80%;
+        }
+        .selected {
+          border: 8px solid lightskyblue;
+          background-color: #e3e3e3;
+          border-radius: 50%;
+          width: 80px;
+          height: 80px;
+
+          transform: scale(1.1);
+
+          font-size: large;
+          font-weight: bold;
+        }
+
+        .chip {
+          border: 8px solid darkblue;
+          background-color: #e3e3e3;
+          border-radius: 50%;
+          width: 80px;
+          height: 80px;
+
+          font-size: large;
+          font-weight: bold;
+        }
+      }
     }
   }
 
