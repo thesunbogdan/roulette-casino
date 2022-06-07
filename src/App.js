@@ -8,6 +8,9 @@ import "./roulette-page.styles.scss";
 import "./bettingMat.styles.scss";
 import { noBets } from "./data";
 import { Button } from "@mui/material";
+import axios from "axios";
+
+// const https = require("https");
 
 class App extends React.Component {
   constructor() {
@@ -15,6 +18,13 @@ class App extends React.Component {
     this.state = {
       currentUser: null,
     };
+  }
+
+  async componentDidMount() {
+    const resp = await axios.get("http://localhost:3001/user");
+
+    console.log("Status is:", resp.status);
+    console.log("Data is: ", resp.data);
   }
 
   getWinningNumber = () => {

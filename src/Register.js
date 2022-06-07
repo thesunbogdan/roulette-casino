@@ -10,20 +10,42 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 class Register extends React.Component {
   constructor() {
     super();
     this.state = {
       firstName: "",
-      middleName: "",
+      yearsOld: "",
       lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      birthDate: "",
+      nickname: "",
     };
   }
+
+  sendRegisterData = async () => {
+    if (this.state.password !== this.state.confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    } else {
+      const resp = await axios
+        .post("http://localhost:3001/userInsert", {
+          Nickname: this.state.nickname,
+          Surname: this.state.lastName,
+          Name: this.state.firstName,
+          Mail: this.state.email,
+          Age: this.state.yearsOld,
+          Password: this.state.password,
+        })
+        .catch((error) => console.log(error));
+
+      console.log("User register status: " + resp.status);
+      console.log("User register data: " + resp.data);
+    }
+  };
 
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -57,15 +79,11 @@ class Register extends React.Component {
               <Typography component="h1" variant="h5">
                 Register
               </Typography>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={this.handleSubmit}
-                sx={{ mt: 3 }}
-              >
+              <Box component="form" sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
                       name="firstName"
                       required
@@ -77,25 +95,28 @@ class Register extends React.Component {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
                       required
                       fullWidth
-                      label="Middle Name"
-                      name="middleName"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      onChange={this.handleChange}
-                      required
-                      fullWidth
-                      id="lastName"
                       label="Last Name"
                       name="lastName"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      autoComplete="off"
+                      onChange={this.handleChange}
+                      required
+                      fullWidth
+                      id="nickname"
+                      label="Nickname"
+                      name="nickname"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
                       required
                       fullWidth
@@ -106,6 +127,7 @@ class Register extends React.Component {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
                       required
                       fullWidth
@@ -116,6 +138,7 @@ class Register extends React.Component {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
                       required
                       fullWidth
@@ -125,21 +148,21 @@ class Register extends React.Component {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <input
-                      style={{ width: "100%", height: "50px" }}
-                      name="birthDate"
+                    <TextField
+                      autoComplete="off"
                       onChange={this.handleChange}
-                      type="date"
-                      value={this.state.birthDate}
+                      required
+                      fullWidth
+                      name="yearsOld"
+                      label="Years old"
                     />
                   </Grid>
                 </Grid>
                 <Button
-                  href="/roulette-page"
-                  type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  onClick={this.sendRegisterData}
                 >
                   Register
                 </Button>

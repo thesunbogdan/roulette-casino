@@ -10,6 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 class Login extends React.Component {
   theme = createTheme();
@@ -21,6 +22,18 @@ class Login extends React.Component {
       password: "",
     };
   }
+
+  sendLoginData = async () => {
+    const resp = await axios
+      .post("http://localhost:3001/userInsert", {
+        mail: this.state.email,
+        password: this.state.password,
+      })
+      .catch((error) => console.log(error));
+
+    console.log("User register status: " + resp.status);
+    console.log("User register data: " + resp.data);
+  };
 
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -58,6 +71,7 @@ class Login extends React.Component {
                 sx={{ mt: 1 }}
               >
                 <TextField
+                  autoComplete="off"
                   onChange={this.handleChange}
                   margin="normal"
                   required
@@ -68,6 +82,7 @@ class Login extends React.Component {
                   autoFocus
                 />
                 <TextField
+                  autoComplete="off"
                   onChange={this.handleChange}
                   margin="normal"
                   required
