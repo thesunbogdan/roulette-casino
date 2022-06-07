@@ -10,8 +10,6 @@ import { noBets } from "./data";
 import { Button } from "@mui/material";
 import axios from "axios";
 
-// const https = require("https");
-
 class App extends React.Component {
   constructor() {
     super();
