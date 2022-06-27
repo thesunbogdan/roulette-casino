@@ -1,14 +1,25 @@
-import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Register from "./Register";
-import Login from "./Login";
 import { data } from "./data";
 import { Wheel } from "react-custom-roulette";
 import "./roulette-page.styles.scss";
 import "./bettingMat.styles.scss";
 import { noBets } from "./data";
-import { Button } from "@mui/material";
+import * as React from "react";
+import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 class App extends React.Component {
   constructor() {
@@ -18,20 +29,149 @@ class App extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const resp = await axios.get("http://localhost:3001/user");
-
-    console.log("Status is:", resp.status);
-    console.log("Data is: ", resp.data);
-  }
-
   getWinningNumber = () => {
     return Math.floor(Math.random() * 37);
   };
 
+  sendEveryTurn = async (id, newBalance) => {
+    await axios.put(`http://localhost:3001/bank`, [id, newBalance]);
+  };
+  adminPage = () => {
+    // const resp = await axios
+    // .get("http://localhost:3001/auth")
+    // .catch((error) => alert(error.message));
+    // if(resp.status === 200)
+    return (
+      <table className="admin-table">
+        <tbody>
+          <tr>
+            {[
+              "id",
+              "name",
+              "surname",
+              "nickname",
+              "mail",
+              "creation date",
+              "age",
+              "delete user",
+            ].map((item) => (
+              <td>
+                <p style={{ color: "black" }}>{item}</p>
+              </td>
+            ))}
+          </tr>
+          <tr>
+            {[
+              "124jnfas2",
+              "Bogdan Andrei",
+              "Dosan",
+              "Dosi",
+              "dasd@asfas.com",
+              "2022-18-29",
+              "21",
+            ].map((item) => (
+              <td>
+                <p style={{ color: "black" }}>{item}</p>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+  Login = () => {
+    let navigate = useNavigate();
+    const theme = createTheme();
+
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+
+    const sendLoginData = async () => {
+      const resp = await axios
+        .post("http://localhost:3001/auth", {
+          Mail: email,
+          Password: password,
+        })
+        .catch((error) => alert(error.message));
+
+      console.log("User login status: " + resp.status);
+      console.log("User login data: " + JSON.stringify(resp.data));
+
+      if (resp.status === 200) {
+        this.setState({ currentUser: resp.data });
+        navigate("/roulette-page");
+      }
+    };
+
+    return (
+      <>
+        <ThemeProvider theme={theme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Login
+              </Typography>
+              <Box component="form" sx={{ mt: 1 }}>
+                <TextField
+                  autoComplete="off"
+                  onChange={(event) => setEmail(event.target.value)}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoFocus
+                />
+                <TextField
+                  autoComplete="off"
+                  onChange={(event) => setPassword(event.target.value)}
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                />
+
+                <Button
+                  onClick={sendLoginData}
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Login
+                </Button>
+                <Grid container>
+                  <Grid item>
+                    <Link to="/register">
+                      {"Don't have an account? Register"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          </Container>
+        </ThemeProvider>
+      </>
+    );
+  };
+
   roulettePage = () => {
     const [inputValue, setInputValue] = useState();
-    const [balance, setBalance] = useState(1000);
+    const [balance, setBalance] = useState(this.state.currentUser.Balance);
     const [history, setHistory] = useState([]);
     const [mustSpin, setMustSpin] = useState(null);
     const [selectedChip, setSelectedChip] = useState(50);
@@ -54,6 +194,7 @@ class App extends React.Component {
 
       if (winningNumber <= 18) finalPrize += state["1 to 18"] * 2;
       else finalPrize += state["19 to 36"] * 2;
+
       if (winningNumber != 0) {
         if (
           [
@@ -99,7 +240,14 @@ class App extends React.Component {
                 const win = calculatePrize(data[winningNumber].option);
                 alert("You won: " + win + "$");
                 setHistory([...history, data[winningNumber].option]);
-                setBalance((oldBalance) => oldBalance + win);
+                setBalance((oldBalance) => {
+                  this.sendEveryTurn(
+                    this.state.currentUser.UserId,
+                    oldBalance + win
+                  );
+                  return oldBalance + win;
+                });
+
                 setMustSpin(false);
                 setState(noBets);
               }}
@@ -139,11 +287,20 @@ class App extends React.Component {
           <div className="bottom">
             <div className="segment" style={{ flex: 0.1 }}>
               {" "}
-              <p>Hello, username!</p>
+              <p>
+                Hello,{" "}
+                {this.state.currentUser
+                  ? this.state.currentUser.NickName
+                  : "Guest"}
+                !
+              </p>
               <p>Your balance: {balance}$</p>
             </div>
             <div className="segment" style={{ flex: 0.1 }}>
-              <Button variant="contained" href="/">
+              <Button
+                variant="contained"
+                onClick={() => this.setState({ currentUser: null })}
+              >
                 Disconnect
               </Button>
             </div>
@@ -156,48 +313,6 @@ class App extends React.Component {
                   {item}$
                 </button>
               ))}
-            </div>
-            <div className="segment" style={{ flex: 0.1 }}>
-              <input
-                type="number"
-                onChange={(event) => setInputValue(event.target.value)}
-              />
-              <Button
-                onClick={() => {
-                  if (inputValue == 0 || !inputValue) {
-                    alert("Incorrect value");
-                    return;
-                  }
-                  if (inputValue % 10 != 0) {
-                    alert("Value must be multiplier of 10");
-                    return;
-                  }
-                  setBalance((balance) => balance + parseInt(inputValue));
-                }}
-                variant="contained"
-              >
-                Deposit
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (inputValue == 0 || !inputValue) {
-                    alert("Incorrect value");
-                    return;
-                  }
-                  if (inputValue > balance) {
-                    alert("Insufficient balance");
-                    return;
-                  }
-                  if (inputValue % 10 != 0) {
-                    alert("Value must be multiplier of 10");
-                    return;
-                  }
-                  setBalance((balance) => balance - parseInt(inputValue));
-                }}
-              >
-                Withdraw
-              </Button>
             </div>
           </div>
         </div>
@@ -562,11 +677,18 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.currentUser);
     return (
       <Routes>
-        <Route path="/*" element={<Login />} />
+        <Route path="/*" element={<this.Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/roulette-page" element={<this.roulettePage />} />
+        <Route
+          path="/roulette-page"
+          element={
+            this.state.currentUser ? <this.roulettePage /> : <Navigate to="/" />
+          }
+        />
+        <Route path="/admin" element={<this.adminPage />} />
       </Routes>
     );
   }
