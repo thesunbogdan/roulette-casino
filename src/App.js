@@ -28,11 +28,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Input from "@mui/material/Input";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import NotInterestedIcon from "@mui/icons-material/NotInterested";
 import { useEffect } from "react";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 class App extends React.Component {
   constructor() {
@@ -55,7 +56,7 @@ class App extends React.Component {
         </div>
         <div className="bottom">
           <div className="half">
-            <p>Current balance: {this.state.currentUser.Balance}</p>
+            <p>Current balance: {this.state.currentUser.Balance}$</p>
           </div>
           <div className="half">
             <button onClick={() => navigate("/roulette-page")}>Play</button>
@@ -92,12 +93,22 @@ class App extends React.Component {
     return (
       <TableCell align="left" className={classes.tableCell}>
         {isEditMode ? (
-          <Input
-            value={row[name]}
-            name={name}
-            onChange={(e) => onChange(e, row)}
-            className={classes.input}
-          />
+          name === "creationDate" || name === "id" ? (
+            <Input
+              disabled
+              value={row[name]}
+              name={name}
+              onChange={(e) => onChange(e, row)}
+              className={classes.input}
+            />
+          ) : (
+            <Input
+              value={row[name]}
+              name={name}
+              onChange={(e) => onChange(e, row)}
+              className={classes.input}
+            />
+          )
         ) : (
           row[name]
         )}
@@ -119,7 +130,6 @@ class App extends React.Component {
       );
     }, []);
 
-    console.log(rows);
     const [previous, setPrevious] = React.useState({});
     const classes = this.useStyles();
 
@@ -132,6 +142,19 @@ class App extends React.Component {
           return row;
         });
       });
+    };
+
+    const deleteEntry = async (id) => {
+      const resp = await axios
+        .delete(`http://localhost:3001/user/${id}`)
+        .catch((error) => alert(error.message));
+
+      setRows(
+        rows.filter((item) => {
+          console.log(item["id"]);
+          return item["id"].toString() !== id.toString();
+        })
+      );
     };
 
     const updateUserInfo = async (id) => {
@@ -152,11 +175,9 @@ class App extends React.Component {
       delete rowsProcessed["creationdate"];
       // console.log(rowsProcessed);
 
-      const resp = await axios.put(
-        `http://localhost:3001/user/${id}`,
-        rowsProcessed
-      );
-      console.log(resp.status);
+      const resp = await axios
+        .put(`http://localhost:3001/user/${id}`, rowsProcessed)
+        .catch((error) => alert(error.message));
 
       //
     };
@@ -195,7 +216,7 @@ class App extends React.Component {
     return (
       <Paper className={classes.root}>
         <Table className={classes.table} aria-label="caption table">
-          <caption>A barbone structure table example with a caption</caption>
+          <caption>Admin view</caption>
           <TableHead>
             <TableRow>
               <TableCell align="left" />
@@ -203,13 +224,10 @@ class App extends React.Component {
               <TableCell align="left">balance</TableCell>
               <TableCell align="left">creationDate</TableCell>
               <TableCell align="left">id</TableCell>
-              <TableCell align="left">losses</TableCell>
               <TableCell align="left">mail</TableCell>
-              <TableCell align="left">moneywon</TableCell>
               <TableCell align="left">nickname</TableCell>
               <TableCell align="left">password</TableCell>
               <TableCell align="left">surname</TableCell>
-              <TableCell align="left">wins</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -232,12 +250,20 @@ class App extends React.Component {
                       </IconButton>
                     </>
                   ) : (
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => onToggleEditMode(row.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => onToggleEditMode(row.id)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => deleteEntry(row.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
                   )}
                 </TableCell>
 
@@ -248,11 +274,9 @@ class App extends React.Component {
                   {...{ row, name: "creationdate", onChange }}
                 />
                 <this.CustomTableCell {...{ row, name: "id", onChange }} />
-                <this.CustomTableCell {...{ row, name: "losses", onChange }} />
+
                 <this.CustomTableCell {...{ row, name: "mail", onChange }} />
-                <this.CustomTableCell
-                  {...{ row, name: "moneywon", onChange }}
-                />
+
                 <this.CustomTableCell
                   {...{ row, name: "nickname", onChange }}
                 />
@@ -260,7 +284,6 @@ class App extends React.Component {
                   {...{ row, name: "password", onChange }}
                 />
                 <this.CustomTableCell {...{ row, name: "surname", onChange }} />
-                <this.CustomTableCell {...{ row, name: "wins", onChange }} />
               </TableRow>
             ))}
           </TableBody>
@@ -274,10 +297,9 @@ class App extends React.Component {
   };
 
   sendEveryTurn = async (id, newBalance) => {
-    const resp = await axios.put(
-      `http://localhost:3001/bank/${id}/${newBalance}`
-    );
-    console.log("resp >>> " + resp.status);
+    const resp = await axios
+      .put(`http://localhost:3001/bank/${id}/${newBalance}`)
+      .catch((error) => alert(error.message));
   };
 
   Login = () => {
@@ -294,9 +316,6 @@ class App extends React.Component {
           Password: password,
         })
         .catch((error) => alert(error.message));
-
-      console.log("User login status: " + resp.status);
-      console.log("User login data: " + JSON.stringify(resp.data));
 
       if (resp.status === 200) {
         this.setState({ currentUser: resp.data });

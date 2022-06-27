@@ -15,10 +15,10 @@ class Login extends React.Component {
         mail: this.state.email,
         password: this.state.password,
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert(error.message));
 
-    console.log("User register status: " + resp.status);
-    console.log("User register data: " + resp.data);
+    // console.log("User register status: " + resp.status);
+    // console.log("User register data: " + resp.data);
   };
 
   handleChange = (event) => {

@@ -30,7 +30,7 @@ const Register = () => {
       return;
     } else {
       const userJSON = {
-        NickName: nickname,
+        Nickname: nickname,
         Surname: lastName,
         Name: firstName,
         Mail: email,
@@ -38,17 +38,14 @@ const Register = () => {
         Password: password,
       };
       const resp = await axios
-        .post("http://localhost:3001/userInsert", userJSON)
-        .catch((error) => console.log(error));
+        .post("http://localhost:3001/user", userJSON)
+        .catch((error) => alert(error.message));
 
-      console.log("User register status: " + resp.status);
-      console.log("User register data: " + resp.data);
+      // console.log("User register status: " + resp.status);
+      // console.log("User register data: " + resp.data);
 
       if (resp.status === 201) {
         navigate("/");
-      } else {
-        alert("Error creating user");
-        return;
       }
     }
   };
