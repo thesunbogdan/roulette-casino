@@ -84,7 +84,7 @@ class Login extends React.Component {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  href="/roulette-page"
+                  href="/landing-page"
                 >
                   Login
                 </Button>
